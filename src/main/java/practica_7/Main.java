@@ -3,12 +3,70 @@
  */
 package practica_7;
 
+import java.util.List;
+
+import io.javalin.Javalin;
+import io.javalin.core.util.RouteOverviewPlugin;
+import io.javalin.plugin.openapi.OpenApiOptions;
+import io.javalin.plugin.openapi.OpenApiPlugin;
+import io.javalin.plugin.openapi.ui.SwaggerOptions;
+import io.swagger.v3.oas.models.info.Info;
+import kong.unirest.GenericType;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import practica_7.controladores.ApiControlador;
+import practica_7.encapsulaciones.Estudiante;
+
 public class Main {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new Main().getGreeting());
+        
+        //Creando la instancia del servidor.
+        Javalin app = Javalin.create(config ->{
+            config.registerPlugin(new RouteOverviewPlugin("/rutas")); //aplicando plugins de las rutas
+            config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+        }).start();
+
+        new ApiControlador(app).aplicarRutas();
+
+        // Crear un nuevo estudiante.
+        HttpResponse<JsonNode> response = Unirest.post("http://localhost:7000/api/estudiante/")
+            .header("Content-Type", "application/json")
+            .body("{\"matricula\": 20170639, \"nombre\": \"Louvens\", \"carrera\": \"ISC\"}")
+            .asJson();
+
+        // // Crear otro nuevo estudiante.
+        HttpResponse<JsonNode> response2 = Unirest.post("http://localhost:7000/api/estudiante/")
+            .header("Content-Type", "application/json")
+            .body("{\"matricula\": 20170982, \"nombre\": \"Baldera\", \"carrera\": \"ISC\"}")
+            .asJson();
+
+
+        // // Consultar un estudiante.
+        Estudiante estudiante = Unirest.get("http://localhost:7000/api/estudiante/{id}")
+            .routeParam("id", "20170639")
+            .asObject(Estudiante.class)
+            .getBody();
+
+        System.err.println(estudiante.getNombre());
+        
+        // Borrar un estudiante.
+        HttpResponse borrarEstudiante = Unirest.delete("http://localhost:7000/api/estudiante/{matricula}")
+            .routeParam("matricula", "20170639")
+            .asEmpty();
+
+        // Listar Todos los estudiantes.
+        List<Estudiante> estudiantes = Unirest.get("http://localhost:7000/api/estudiante/")
+        .asObject(new GenericType<List<Estudiante>>(){})
+        .getBody();
+        
+    }
+
+    private static OpenApiOptions getOpenApiOptions() {
+        Info applicationInfo = new Info()
+                .version("1.0")
+                .description("My Application");
+        return new OpenApiOptions(applicationInfo).path("/openapi").swagger(new SwaggerOptions("/openapi-ui"));
     }
 }

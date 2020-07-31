@@ -10,7 +10,7 @@ import practica_7.util.NoExisteEstudianteException;
 
 public class ApiControlador extends BaseControlador {
 
-    private EstudianteServices fakeServices = EstudianteServices.getInstancia();
+    private EstudianteServices estudianteServices = EstudianteServices.getInstancia();
 
     public ApiControlador(Javalin app) {
         super(app);
@@ -34,11 +34,11 @@ public class ApiControlador extends BaseControlador {
                         // Unirest.get("http://localhost:7000")
                         //     .asString();
 
-                        ctx.json(fakeServices.listarEstudiante());
+                        ctx.json(estudianteServices.listarEstudiante());
                     });
 
                     get("/:matricula", ctx -> {
-                        ctx.json(fakeServices.getEstudiantePorMatricula(ctx.pathParam("matricula", Integer.class).get()));
+                        ctx.json(estudianteServices.getEstudiantePorMatricula(ctx.pathParam("matricula", Integer.class).get()));
                     });
 
                     post("/", ctx -> {
@@ -46,20 +46,21 @@ public class ApiControlador extends BaseControlador {
                         //parseando la informacion del POJO debe venir en formato json.
                         Estudiante tmp = ctx.bodyAsClass(Estudiante.class);
                         //creando.
-                        ctx.json(fakeServices.crearEstudiante(tmp));
+                        ctx.json(estudianteServices.crearEstudiante(tmp));
+
                     });
 
                     put("/", ctx -> {
                         //parseando la informacion del POJO.
                         Estudiante tmp = ctx.bodyAsClass(Estudiante.class);
                         //creando.
-                        ctx.json(fakeServices.actualizarEstudiante(tmp));
+                        ctx.json(estudianteServices.actualizarEstudiante(tmp));
 
                     });
 
                     delete("/:matricula", ctx -> {
                         //creando.
-                        ctx.json(fakeServices.eliminandoEstudiante(ctx.pathParam("matricula", Integer.class).get()));
+                        ctx.json(estudianteServices.eliminandoEstudiante(ctx.pathParam("matricula", Integer.class).get()));
                     });
                 });
             });

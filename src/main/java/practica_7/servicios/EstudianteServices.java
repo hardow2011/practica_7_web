@@ -18,9 +18,6 @@ public class EstudianteServices {
      * Constructor privado.
      */
     private EstudianteServices(){
-        //añadiendo los estudiantes.
-        listaEstudiante.add(new Estudiante(20170639, "Louvens", "ISC"));
-        //anadiendo los usuarios.
 
     }
 
@@ -58,9 +55,7 @@ public class EstudianteServices {
     }
 
     public boolean eliminandoEstudiante(int matricula){
-        Estudiante tmp = new Estudiante();
-        tmp.setMatricula(matricula);
-        return listaEstudiante.remove(tmp);
+        return listaEstudiante.remove(getEstudiantePorMatricula(matricula));
     }
 
 }
