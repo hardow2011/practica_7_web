@@ -71,7 +71,7 @@ public class Main {
         .asObject(new GenericType<List<Estudiante>>(){})
         .getBody();
 
-        System.out.println("\nListar estudiantes creados:");
+        System.out.println("\nListar estudiantes restantes:");
         for (Estudiante e : estudiantes) {
             System.out.println(e.getMatricula() + " " + e.getNombre() + " " + e.getCarrera());
         }

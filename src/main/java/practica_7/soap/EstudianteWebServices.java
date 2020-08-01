@@ -27,7 +27,8 @@ public class EstudianteWebServices {
     }
 
     @WebMethod
-    public Estudiante crearEstudiante(Estudiante estudiante){
+    public Estudiante crearEstudiante(int matricula, String nombre, String carrera){
+        Estudiante estudiante = new Estudiante(matricula, nombre, carrera);
         return estudianteServices.crearEstudiante(estudiante);
     }
 
@@ -37,8 +38,8 @@ public class EstudianteWebServices {
     }
 
     @WebMethod
-    public boolean borrarEstudiante(Estudiante estudiante){
-        return estudianteServices.eliminarEstudiante(estudiante);
+    public boolean borrarEstudiante(int matricula){
+        return estudianteServices.eliminarEstudiantePorId(matricula);
     }
 
 }
