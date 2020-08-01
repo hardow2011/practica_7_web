@@ -16,6 +16,7 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import practica_7.controladores.ApiControlador;
+import practica_7.controladores.SoapControlador;
 import practica_7.encapsulaciones.Estudiante;
 
 public class Main {
@@ -26,9 +27,12 @@ public class Main {
         Javalin app = Javalin.create(config ->{
             config.registerPlugin(new RouteOverviewPlugin("/rutas")); //aplicando plugins de las rutas
             config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
-        }).start();
+        });
 
         new ApiControlador(app).aplicarRutas();
+        new SoapControlador(app).aplicarRutas();
+
+        app.start();
 
         // Crear un nuevo estudiante.
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:7000/api/estudiante/")

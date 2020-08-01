@@ -54,8 +54,12 @@ public class EstudianteServices {
         return tmp;
     }
 
-    public boolean eliminandoEstudiante(int matricula){
+    public boolean eliminarEstudiantePorId(int matricula){
         return listaEstudiante.remove(getEstudiantePorMatricula(matricula));
     }
+
+	public boolean eliminarEstudiante(Estudiante estudiante) {
+		return listaEstudiante.remove(estudiante);
+	}
 
 }

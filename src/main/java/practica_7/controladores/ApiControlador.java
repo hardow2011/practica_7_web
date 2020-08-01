@@ -60,7 +60,7 @@ public class ApiControlador extends BaseControlador {
 
                     delete("/:matricula", ctx -> {
                         //creando.
-                        ctx.json(estudianteServices.eliminandoEstudiante(ctx.pathParam("matricula", Integer.class).get()));
+                        ctx.json(estudianteServices.eliminarEstudiantePorId(ctx.pathParam("matricula", Integer.class).get()));
                     });
                 });
             });
