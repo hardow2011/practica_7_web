@@ -18,6 +18,7 @@ import kong.unirest.Unirest;
 import practica_7.controladores.ApiControlador;
 import practica_7.controladores.SoapControlador;
 import practica_7.encapsulaciones.Estudiante;
+import practica_7.servicios.EstudianteServices;
 
 public class Main {
 
@@ -45,17 +46,22 @@ public class Main {
             .header("Content-Type", "application/json")
             .body("{\"matricula\": 20170982, \"nombre\": \"Baldera\", \"carrera\": \"ISC\"}")
             .asJson();
-
+        
+        System.out.println("\nListar estudiantes creados:");
+        for (Estudiante e : EstudianteServices.getInstancia().listarEstudiante()) {
+            System.out.println(e.getMatricula() + " " + e.getNombre() + " " + e.getCarrera());
+        }
 
         // // Consultar un estudiante.
+        System.out.println("\nConsultar estudiante con matrícula 20170639:");
         Estudiante estudiante = Unirest.get("http://localhost:7000/api/estudiante/{id}")
             .routeParam("id", "20170639")
             .asObject(Estudiante.class)
             .getBody();
-
-        System.err.println(estudiante.getNombre());
+        System.out.println(estudiante.getMatricula() + " " + estudiante.getNombre() + " " + estudiante.getCarrera());
         
         // Borrar un estudiante.
+        System.out.println("\nEstudiante con matrícula 20170639 borrado");
         HttpResponse borrarEstudiante = Unirest.delete("http://localhost:7000/api/estudiante/{matricula}")
             .routeParam("matricula", "20170639")
             .asEmpty();
@@ -64,6 +70,11 @@ public class Main {
         List<Estudiante> estudiantes = Unirest.get("http://localhost:7000/api/estudiante/")
         .asObject(new GenericType<List<Estudiante>>(){})
         .getBody();
+
+        System.out.println("\nListar estudiantes creados:");
+        for (Estudiante e : estudiantes) {
+            System.out.println(e.getMatricula() + " " + e.getNombre() + " " + e.getCarrera());
+        }
         
     }
 
